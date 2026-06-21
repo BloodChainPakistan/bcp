@@ -57,7 +57,7 @@ export default function Contact() {
               </div>
               <h3 className="text-xl font-bold mb-2">Emergency Blood Request</h3>
               <p className="text-red-100 mb-4">Dedicated WhatsApp & Helpline</p>
-              <p className="text-3xl font-bold tracking-wider">0349-9021065</p>
+              <p className="text-3xl font-bold tracking-wider">0349-9021062</p>
             </div>
 
             <div className="bg-white border border-gray-100 p-8 rounded-3xl shadow-sm">

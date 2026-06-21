@@ -55,7 +55,7 @@ const SECTIONS: { heading: string; body: string[] }[] = [
   {
     heading: 'Contact us',
     body: [
-      'For any privacy question or data request, email bloodchainpakistan@gmail.com or call our helpline at 0349-9021065.',
+      'For any privacy question or data request, email bloodchainpakistan@gmail.com or call our helpline at 0349-9021062.',
     ],
   },
 ];

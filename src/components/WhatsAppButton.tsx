@@ -1,6 +1,6 @@
 import { useFeature } from '../lib/featureFlags';
 
-const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || '923149967653';
+const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || '923499021062';
 const PREFILL = encodeURIComponent(
   "Hi Blood Chain Pakistan! I'd like to ask about blood donation.",
 );
@@ -9,7 +9,7 @@ const PREFILL = encodeURIComponent(
  * Floating click-to-chat WhatsApp button (public site).
  * Opens a chat to the configured number. This is the interim step before the
  * automated WhatsApp Cloud API bot (which requires Meta Business onboarding).
- * Set VITE_WHATSAPP_NUMBER (digits only, international, e.g. 923149967653).
+ * Set VITE_WHATSAPP_NUMBER (digits only, international, e.g. 923499021062).
  */
 export default function WhatsAppButton() {
   const enabled = useFeature('whatsapp_button');

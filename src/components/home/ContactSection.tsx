@@ -55,7 +55,7 @@ export default function ContactSection() {
                                 </div>
                                 <div>
                                     <div className="text-sm text-gray-400">Emergency Helpline</div>
-                                    <div className="text-xl font-bold">0349-9021065</div>
+                                    <div className="text-xl font-bold">0349-9021062</div>
                                 </div>
                             </div>
                         </div>

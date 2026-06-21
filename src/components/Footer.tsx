@@ -22,8 +22,8 @@ export default function Footer() {
             <Link to="/register-donor" className="bg-bcp-red hover:bg-red-700 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all flex items-center gap-3">
               <Heart className="h-5 w-5" /> Become a Donor
             </Link>
-            <a href="tel:03499021065" className="bg-transparent border border-white/20 hover:border-white/50 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all flex items-center gap-3">
-              <Phone className="h-5 w-5" /> Emergency: 0349-9021065
+            <a href="tel:03499021062" className="bg-transparent border border-white/20 hover:border-white/50 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all flex items-center gap-3">
+              <Phone className="h-5 w-5" /> Emergency: 0349-9021062
             </a>
           </div>
         </div>
@@ -49,7 +49,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-3 text-gray-400">
                 <Phone className="h-5 w-5" />
-                <a href="https://wa.me/923499021065" className="hover:text-white transition-colors">0349-9021065</a>
+                <a href="https://wa.me/923499021062" className="hover:text-white transition-colors">0349-9021062</a>
               </li>
               <li className="flex items-start gap-3 text-gray-400">
                 <MapPin className="h-5 w-5 mt-1 flex-shrink-0" />
