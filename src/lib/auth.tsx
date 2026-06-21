@@ -8,6 +8,8 @@ interface AuthState {
   session: Session | null;
   role: Role;
   loading: boolean;
+  /** True while the role is being fetched from the DB after a session change. */
+  roleLoading: boolean;
   signIn: (email: string, password: string) => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
 }
@@ -21,6 +23,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [role, setRole] = useState<Role>(null);
   const [loading, setLoading] = useState(true);
+  const [roleLoading, setRoleLoading] = useState(false);
 
   /**
    * Restore the role from localStorage synchronously. getSession() works
@@ -41,15 +44,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
    * never throws — when offline the request fails and we keep the cached role.
    */
   async function refreshRole(s: Session | null) {
-    if (!s) return;
+    if (!s) {
+      setRoleLoading(false);
+      return;
+    }
+    setRoleLoading(true);
     try {
       const { data, error } = await supabase.from('profiles').select('role').eq('id', s.user.id).single();
-      if (error || !data?.role) return; // offline / not found → keep cached role
-      const next = data.role as Role;
-      setRole(next);
-      if (next) localStorage.setItem(roleKey(s.user.id), next);
+      if (!error && data?.role) {
+        const next = data.role as Role;
+        setRole(next);
+        localStorage.setItem(roleKey(s.user.id), next);
+      }
+      // offline / not found → keep whatever applyCachedRole restored
     } catch {
       /* offline: keep whatever applyCachedRole restored */
+    } finally {
+      setRoleLoading(false);
     }
   }
 
@@ -86,7 +97,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ session, role, loading, signIn, signOut }}>
+    <AuthContext.Provider value={{ session, role, loading, roleLoading, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   );
