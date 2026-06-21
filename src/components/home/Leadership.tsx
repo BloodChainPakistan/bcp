@@ -13,11 +13,11 @@ import masoodImg from '../../assets/team/CoreCabinet/Masood Khan.jpeg';
 import jehanImg from '../../assets/team/CoreCabinet/Jehan Badshah.jpeg';
 
 import Luqman from "../../assets/team/Bogs/Dr Luqman Hakeem.jpeg"
-import Afaq from "../../assets/team/Bogs/Afaq Karim.jpg"
+import Afaq from "../../assets/team/Bogs/Afaq Karim.JPG"
 import Rehan from "../../assets/team/Bogs/engr Rehan Khan.jpeg"
-import Kamran from "../../assets/team/Bogs/Engr Kamran Khan.jpg"
+import Kamran from "../../assets/team/Bogs/Engr Kamran Khan.JPG"
 import Waqas from "../../assets/team/Bogs/Muhammad Waqas Blood Wala.jpeg"
-import Ibadullah from "../../assets/team/Bogs/Ibadullah Jan.jpeg"
+import Ibadullah from "../../assets/team/Bogs/IbadUllah Jan.jpeg"
 import Saeed from "../../assets/team/Bogs/Saeed Anwar.jpeg"
 import Usman from "../../assets/team/Bogs/Usman Ali.jpeg"
 import Sajjad from "../../assets/team/Bogs/Sajjad Saeed.jpeg"
