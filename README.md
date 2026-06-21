@@ -266,7 +266,3 @@ Out of scope (future): iOS/Android apps, hospital ERP integration, live map navi
   Supabase value that reaches the browser.
 - Donor health data is handled under explicit consent; contact details are shared only on a
   donor's per-request acceptance.
-
-## License
-
-© Blood Chain Pakistan. All rights reserved. Internal project — not for redistribution without permission.
