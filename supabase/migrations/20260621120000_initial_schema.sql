@@ -869,6 +869,8 @@ select n, r, g, o, true, true from (values
   ('Saeed Anwar',             'Member',     'bog', 7),
   ('Usman Ali',               'Member',     'bog', 8),
   ('Sajjad Saeed',            'Member',     'bog', 9),
+  ('Fawad Latif',             'Member',     'bog', 10),
+  ('Rehan Ullah Tajakzai',    'Member',     'bog', 11),
   ('Sana Ur Rehman',  'Country Governor',                                          'core_cabinet', 1),
   ('Qandeel Saleem',  'Secretary General',                                         'core_cabinet', 2),
   ('Arsal Imran',     'Director Media and Communication',                          'core_cabinet', 3),

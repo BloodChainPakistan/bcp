@@ -14,6 +14,8 @@ import Ibadullah from "../assets/team/Bogs/IbadUllah Jan.jpeg"
 import Saeed from "../assets/team/Bogs/Saeed Anwar.jpeg"
 import Usman from "../assets/team/Bogs/Usman Ali.jpeg"
 import Sajjad from "../assets/team/Bogs/Sajjad Saeed.jpeg"
+import Fawad from "../assets/team/Bogs/Fawad Latif.jpeg"
+import RehanUllah from "../assets/team/Bogs/Rehan Ullah Tajakzai.jpeg"
 
 // Import Core Cabinet Images
 import sanaImg from '../assets/team/CoreCabinet/Sana Ur Rehman.jpeg';
@@ -201,7 +203,9 @@ export default function About() {
                 { name: "Muhamad Waqas Bloodwala", role: "Member", img: Waqas },
                 { name: "Saeed Anwar", role: "Member", img: Saeed },
                 { name: "Usman Ali", role: "Member", img: Usman },
-                { name: "Sajjad Saeed", role: "Member", img: Sajjad }
+                { name: "Sajjad Saeed", role: "Member", img: Sajjad },
+                { name: "Fawad Latif", role: "Member", img: Fawad },
+                { name: "Rehan Ullah Tajakzai", role: "Member", img: RehanUllah }
               ].map((member, idx) => (
                 <motion.div
                   key={idx}

@@ -21,6 +21,8 @@ import Ibadullah from "../../assets/team/Bogs/IbadUllah Jan.jpeg"
 import Saeed from "../../assets/team/Bogs/Saeed Anwar.jpeg"
 import Usman from "../../assets/team/Bogs/Usman Ali.jpeg"
 import Sajjad from "../../assets/team/Bogs/Sajjad Saeed.jpeg"
+import Fawad from "../../assets/team/Bogs/Fawad Latif.jpeg"
+import RehanUllah from "../../assets/team/Bogs/Rehan Ullah Tajakzai.jpeg"
 
 
 const bogMembers = [
@@ -33,6 +35,8 @@ const bogMembers = [
     { name: 'Saeed Anwar', role: 'Member', img: Saeed },
     { name: 'Usman Ali', role: 'Member', img: Usman },
     { name: 'Sajjad Saeed', role: 'Member', img: Sajjad },
+    { name: 'Fawad Latif', role: 'Member', img: Fawad },
+    { name: 'Rehan Ullah Tajakzai', role: 'Member', img: RehanUllah },
 ];
 
 const coreCabinet = [
