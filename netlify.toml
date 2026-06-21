@@ -1,0 +1,21 @@
+# Netlify deployment config for Blood Chain Pakistan.
+# Connect this repo in Netlify → it reads this file: builds with Vite and serves
+# dist/. The SPA redirect makes client-side routes (e.g. /admin, /register-donor)
+# work on refresh — the Netlify equivalent of the Apache .htaccess rewrite.
+#
+# Set these in Netlify → Site settings → Environment variables (NOT in this file):
+#   VITE_SUPABASE_URL
+#   VITE_SUPABASE_PUBLISHABLE_KEY
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Send every non-file path to index.html so React Router handles routing.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

@@ -1,0 +1,178 @@
+/**
+ * global.css — base document styles, focus behavior, the page loader,
+ * and reduced-motion guards.
+ */
+
+html {
+  /* Always reserve the scrollbar gutter so content doesn't shift between pages
+     that do/don't scroll. Single-edge (not both-edges) so full-bleed left
+     elements like the admin sidebar stay flush against the viewport edge. */
+  scrollbar-gutter: stable;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bcp-light);
+  color: var(--color-bcp-dark);
+}
+
+/* Accessible focus ring for keyboard users (WCAG focus-states) */
+:focus-visible {
+  outline: 2px solid var(--color-bcp-red);
+  outline-offset: 2px;
+}
+
+/* ── Blood-drop page loader ─────────────────────────────────── */
+.bcp-loader {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-loader);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.1rem;
+  background: radial-gradient(circle at 50% 38%, #ffe4e4 0%, #fff1f1 45%, var(--color-bcp-light) 100%);
+  transition: opacity var(--dur-slow) ease, visibility var(--dur-slow) ease;
+}
+.bcp-loader[data-hidden='true'] {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.bcp-drop-wrap {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 92px;
+  height: 92px;
+}
+.bcp-drop-svg {
+  position: relative;
+  width: 84px;
+  height: 84px;
+  filter: drop-shadow(0 8px 18px rgba(236, 30, 36, 0.3));
+  animation: bcp-drop-bob 1.6s ease-in-out infinite;
+}
+.bcp-drop-fill {
+  animation: bcp-drop-rise 1.5s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+}
+.bcp-ripple {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid rgba(236, 30, 36, 0.35);
+  animation: bcp-ripple 1.9s ease-out infinite;
+}
+.bcp-ripple-2 {
+  animation-delay: 0.95s;
+}
+.bcp-loader-text {
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: var(--color-bcp-red);
+  animation: bcp-text-fade 1.6s ease-in-out infinite;
+}
+.bcp-loader-bar {
+  width: 150px;
+  height: 4px;
+  border-radius: var(--radius-pill);
+  background: rgba(236, 30, 36, 0.15);
+  overflow: hidden;
+}
+.bcp-loader-bar-fill {
+  display: block;
+  height: 100%;
+  width: 40%;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(90deg, var(--color-bcp-orange), var(--color-bcp-red));
+  animation: bcp-bar 1.3s ease-in-out infinite;
+}
+
+@keyframes bcp-drop-rise {
+  0% {
+    transform: translateY(26px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+@keyframes bcp-ripple {
+  0% {
+    transform: scale(0.7);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(2.1);
+    opacity: 0;
+  }
+}
+@keyframes bcp-drop-bob {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-4px) scale(1.04);
+  }
+}
+@keyframes bcp-bar {
+  0% {
+    transform: translateX(-130%);
+  }
+  100% {
+    transform: translateX(360%);
+  }
+}
+@keyframes bcp-text-fade {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Respect users who prefer reduced motion */
+.bcp-pulse {
+  width: 170px;
+  height: 30px;
+}
+.bcp-pulse polyline {
+  fill: none;
+  stroke: var(--color-bcp-red);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 55 280;
+  animation: bcp-ecg 1.6s linear infinite;
+}
+@keyframes bcp-ecg {
+  0% {
+    stroke-dashoffset: 335;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bcp-pulse polyline,
+  .bcp-drop-svg,
+  .bcp-drop-fill,
+  .bcp-ripple,
+  .bcp-loader-text,
+  .bcp-loader-bar-fill,
+  .card-hover,
+  .link-underline {
+    animation: none !important;
+    transition: none !important;
+  }
+  .bcp-drop-fill {
+    transform: translateY(6px);
+  }
+}

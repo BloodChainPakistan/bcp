@@ -1,0 +1,53 @@
+name: CI
+
+# Generic, host-agnostic validation pipeline. Runs on every pull request and on
+# pushes to any branch except main. It lints, type-checks, tests, and builds —
+# but never deploys. Deployment is handled separately by deploy.yml (main →
+# Hostinger over FTPS). Point a branch-protection "required status check" at the
+# `verify` job to block merges that don't pass.
+
+on:
+  push:
+    branches-ignore: [main]
+  pull_request:
+    branches: ['**']
+
+# Least privilege: only read the repo.
+permissions:
+  contents: read
+
+# One run per ref; cancel superseded runs to save minutes.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Test
+        env:
+          VITE_SUPABASE_URL: https://placeholder.supabase.co
+          VITE_SUPABASE_PUBLISHABLE_KEY: placeholder-anon-key
+        run: npm run test
+
+      # Build with placeholder env so the bundle compiles; real values are only
+      # needed at deploy time (deploy.yml injects the production secrets).
+      - name: Build
+        run: npm run build
