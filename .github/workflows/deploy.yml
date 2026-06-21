@@ -1,0 +1,79 @@
+name: Deploy to Hostinger
+
+# Builds the production bundle and uploads dist/ to Hostinger over FTPS.
+# Runs automatically on push to main, or manually from the Actions tab.
+# The upload step ONLY runs on the main ref (production), so a manual dispatch
+# from a feature branch builds + tests but does not deploy.
+#
+# One-time setup (GitHub → repo → Settings → Secrets and variables → Actions):
+#   FTP_SERVER                     e.g. ftp.yourdomain.com  (Hostinger → Files → FTP Accounts)
+#   FTP_USERNAME                   your Hostinger FTP user
+#   FTP_PASSWORD                   your Hostinger FTP password
+#   VITE_SUPABASE_URL              same value as your .env
+#   VITE_SUPABASE_PUBLISHABLE_KEY  same value as your .env
+# After the secrets exist, deploy = merge/push to main (or "Run workflow" on main).
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+# Least privilege: this workflow only reads the repo; it never writes back.
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Run tests
+        env:
+          VITE_SUPABASE_URL: https://placeholder.supabase.co
+          VITE_SUPABASE_PUBLISHABLE_KEY: placeholder-anon-key
+        run: npm run test
+
+      - name: Build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+        run: npm run build
+
+      # Upload ONLY on the production (main) ref. A manual dispatch from any
+      # other branch stops here — build + tests ran, but no credentials/upload.
+      - name: Deploy dist/ to Hostinger via FTPS
+        if: github.ref == 'refs/heads/main'
+        # NOTE: pinned to a version tag for readability. For stricter supply-chain
+        # safety, pin this (and the actions above) to a full commit SHA, or enable
+        # Dependabot to manage SHA pins.
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps # encrypt credentials + payload over TLS (no cleartext FTP)
+          security: strict
+          port: 21
+          local-dir: ./dist/
+          # Hostinger document root — usually public_html. Adjust if your domain
+          # lives in a subfolder (e.g. ./domains/yourdomain.com/public_html/).
+          server-dir: ./public_html/

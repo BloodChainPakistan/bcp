@@ -1,0 +1,68 @@
+/**
+ * tokens.css — THE control panel.
+ * Change a value here and it propagates across the whole site.
+ *
+ * Two layers:
+ *  1. @theme  → Tailwind-aware tokens. These generate utilities
+ *               (e.g. --color-bcp-red ⇒ bg-bcp-red / text-bcp-red).
+ *  2. :root   → plain design tokens consumed by component classes
+ *               (components.css) via var(). Framework-independent.
+ */
+
+@theme {
+  /* ── Fonts ───────────────────────────────────────────── */
+  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-script: "Great Vibes", cursive;
+
+  /* ── Brand ───────────────────────────────────────────── */
+  --color-bcp-red: #ec1e24;
+  --color-bcp-red-700: #b91319; /* hover / active */
+  --color-bcp-red-50: #feecec; /* tint background */
+  --color-bcp-orange: #ff9505;
+  --color-bcp-orange-50: #fff4e5;
+  --color-bcp-dark: #03191e;
+  --color-bcp-dark-900: #021216; /* hover for dark surfaces */
+  --color-bcp-light: #e9fff9;
+
+  /* ── Semantic ────────────────────────────────────────── */
+  --color-surface: #ffffff;
+  --color-text: #03191e;
+  --color-muted: #6b7280;
+  --color-border: #e5e7eb;
+  --color-success: #16a34a;
+  --color-warning: #d97706;
+  --color-danger: #dc2626;
+}
+
+:root {
+  /* ── Radius ───────────────────────────────────────────── */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-pill: 9999px;
+
+  /* ── Shadow ───────────────────────────────────────────── */
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.05);
+  --shadow-card: 0 8px 30px rgb(0 0 0 / 0.06);
+  --shadow-card-hover: 0 18px 40px -18px rgba(3, 25, 30, 0.35);
+  --shadow-float: 0 12px 30px -6px rgba(22, 163, 74, 0.4);
+  --shadow-glow-red: 0 10px 30px -8px rgba(236, 30, 36, 0.45);
+
+  /* ── Motion ───────────────────────────────────────────── */
+  --dur-fast: 150ms;
+  --dur-normal: 300ms;
+  --dur-slow: 500ms;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+
+  /* ── Layout ───────────────────────────────────────────── */
+  --space-section: clamp(4rem, 3rem + 5vw, 8rem);
+
+  /* ── Z-index scale (replaces ad-hoc z-50 / z-[60]) ────── */
+  --z-nav: 50;
+  --z-overlay: 40;
+  --z-drawer: 50;
+  --z-float: 60;
+  --z-loader: 9999;
+}

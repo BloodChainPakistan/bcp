@@ -1,0 +1,181 @@
+/**
+ * components.css — reusable component classes built entirely from tokens.
+ * Edit a token in tokens.css to restyle these everywhere at once.
+ */
+
+/* ── Buttons ──────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  line-height: 1;
+  padding: 0.75rem 1.5rem;
+  border: 2px solid transparent;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: background-color var(--dur-normal) var(--ease-out-expo),
+    border-color var(--dur-normal) var(--ease-out-expo),
+    color var(--dur-normal) var(--ease-out-expo),
+    transform var(--dur-normal) var(--ease-out-expo),
+    box-shadow var(--dur-normal) var(--ease-out-expo);
+}
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -8px rgba(3, 25, 30, 0.28);
+}
+.btn:active {
+  transform: translateY(0) scale(0.96);
+  filter: brightness(0.92);
+  box-shadow: none;
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+.btn:focus-visible {
+  outline: 2px solid var(--color-bcp-red);
+  outline-offset: 2px;
+}
+
+.btn-primary {
+  background: var(--color-bcp-red);
+  border-color: var(--color-bcp-red);
+  color: #fff;
+  box-shadow: var(--shadow-glow-red);
+}
+.btn-primary:hover {
+  background: var(--color-bcp-red-700);
+  border-color: var(--color-bcp-red-700);
+  box-shadow: 0 12px 28px -8px rgba(236, 30, 36, 0.5);
+}
+
+.btn-dark {
+  background: var(--color-bcp-dark);
+  border-color: var(--color-bcp-dark);
+  color: #fff;
+}
+.btn-dark:hover {
+  background: var(--color-bcp-red);
+  border-color: var(--color-bcp-red);
+  color: #fff;
+}
+
+.btn-outline {
+  background: transparent;
+  border-color: var(--color-bcp-dark);
+  color: var(--color-bcp-dark);
+}
+.btn-outline:hover {
+  border-color: var(--color-bcp-red);
+  color: var(--color-bcp-red);
+  background: var(--color-bcp-red-50);
+}
+
+.btn-ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--color-bcp-dark);
+}
+.btn-ghost:hover {
+  color: var(--color-bcp-red);
+  background: var(--color-bcp-red-50);
+}
+
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+.btn-lg {
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+}
+
+/* ── Cards ────────────────────────────────────────────────── */
+.card {
+  background: var(--color-surface);
+  border: 1px solid rgb(0 0 0 / 0.06);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+.card-hover {
+  transition: transform var(--dur-normal) var(--ease-out-expo),
+    box-shadow var(--dur-normal) var(--ease-out-expo),
+    border-color var(--dur-normal) var(--ease-out-expo);
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card-hover);
+  border-color: rgba(236, 30, 36, 0.45);
+}
+
+/* ── Form controls ────────────────────────────────────────── */
+.input,
+.select,
+.textarea {
+  width: 100%;
+  padding: 0.625rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: #fff;
+  color: var(--color-text);
+  outline: none;
+  transition: border-color var(--dur-fast) ease, box-shadow var(--dur-fast) ease;
+}
+.input:focus,
+.select:focus,
+.textarea:focus {
+  border-color: var(--color-bcp-red);
+  box-shadow: 0 0 0 3px rgba(236, 30, 36, 0.18);
+}
+.field-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-bcp-dark);
+  margin-bottom: 0.375rem;
+}
+.field-error {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--color-bcp-red);
+}
+
+/* ── Section headings ─────────────────────────────────────── */
+.eyebrow {
+  color: var(--color-bcp-red);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+}
+.section-title {
+  font-size: clamp(2rem, 1rem + 4vw, 3rem);
+  font-weight: 600;
+  color: var(--color-bcp-dark);
+}
+
+/* ── Badge ────────────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* ── Animated link underline ──────────────────────────────── */
+.link-underline {
+  background-image: linear-gradient(var(--color-bcp-red), var(--color-bcp-red));
+  background-size: 0% 2px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size var(--dur-normal) var(--ease-out-expo);
+}
+.link-underline:hover {
+  background-size: 100% 2px;
+}
