@@ -54,7 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!error && data?.role) {
         const next = data.role as Role;
         setRole(next);
-        localStorage.setItem(roleKey(s.user.id), next);
+        if (next) localStorage.setItem(roleKey(s.user.id), next);
       }
       // offline / not found → keep whatever applyCachedRole restored
     } catch {
