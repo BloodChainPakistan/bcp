@@ -26,11 +26,21 @@ client.on('qr', (qr) => {
   qrcode.generate(qr, { small: true });
 });
 
+let timer = null;
+
 client.on('authenticated', () => console.log('Authenticated ✓'));
 client.on('auth_failure', (m) => console.error('Auth failure:', m));
-client.on('disconnected', (r) => console.error('Disconnected:', r));
+client.on('disconnected', (reason) => {
+  console.error('Disconnected:', reason);
+  if (timer) { clearInterval(timer); timer = null; }
+  // Auto-recover so an unattended bot survives transient drops. A genuine
+  // LOGOUT will reprint the QR so you can re-link the device.
+  setTimeout(() => {
+    console.log('Reconnecting…');
+    client.initialize().catch((e) => console.error('Reconnect failed:', e.message));
+  }, 10000);
+});
 
-let timer = null;
 client.on('ready', () => {
   console.log(`\nBCP bot ready ✓  (DRY_RUN=${DRY_RUN}, polling every ${POLL_MS}ms)`);
   if (DRY_RUN) console.log('DRY_RUN is on — messages are LOGGED, not sent. Set DRY_RUN=false to go live.\n');
