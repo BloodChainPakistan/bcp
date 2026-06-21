@@ -1,24 +1,37 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Droplet } from 'lucide-react';
 import { useAuth } from '../../lib/auth';
 
 export default function AdminLogin() {
-  const { signIn } = useAuth();
+  const { signIn, session, role, roleLoading } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [attempted, setAttempted] = useState(false);
+
+  // Redirect once we know the role. Waiting for roleLoading avoids the race
+  // where the gate bounced a genuine admin before their role had loaded.
+  useEffect(() => {
+    if (!session || roleLoading) return;
+    if (role === 'admin') {
+      navigate('/admin', { replace: true });
+    } else if (attempted) {
+      setError('Signed in, but this account does not have admin access. Ask an administrator to grant the admin role.');
+    }
+  }, [session, role, roleLoading, attempted, navigate]);
 
   async function handle(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
     setError(null);
+    setAttempted(true);
     const { error } = await signIn(email, password);
     setBusy(false);
     if (error) setError(error);
-    else navigate('/admin', { replace: true });
+    // On success the effect above redirects once the admin role resolves.
   }
 
   return (
