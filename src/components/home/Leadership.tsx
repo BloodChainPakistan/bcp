@@ -1,9 +1,15 @@
-import { motion } from 'motion/react';
+import { useEffect, useRef, useState } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useTeam } from '../../lib/useTeam';
 import type { TeamMember } from '../../lib/teamData';
 
-const MemberCard = ({ member, hidden = false }: { member: TeamMember; hidden?: boolean }) => (
-    <div className="text-center group w-64 shrink-0" aria-hidden={hidden}>
+// One card (w-64 = 256px) + gap-8 (32px) = 288px scroll step.
+const STEP = 288;
+// At or below this count the row is shown statically (no movement / no controls).
+const MIN_TO_MOVE = 4;
+
+const MemberCard = ({ member }: { member: TeamMember }) => (
+    <div className="text-center group w-64 shrink-0">
         <div className="relative w-48 h-48 mx-auto mb-6 rounded-full overflow-hidden shadow-lg group-hover:shadow-xl transition-shadow">
             {member.img ? (
                 <img src={member.img} alt={member.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" referrerPolicy="no-referrer" />
@@ -24,26 +30,91 @@ const SkeletonCard = () => (
     </div>
 );
 
-/** A horizontally-scrolling marquee of member cards (or skeletons while loading). */
-function MarqueeRow({ members, loading, animateX }: { members: TeamMember[]; loading: boolean; animateX: [number, number] }) {
+/**
+ * Team row.
+ * - loading → skeletons
+ * - 1..MIN_TO_MOVE members → static centered row (no movement, no controls)
+ * - more than MIN_TO_MOVE → swipeable slider with prev/next arrows that also
+ *   gently auto-advances (paused while the user is hovering/touching it).
+ */
+function TeamSlider({ members, loading }: { members: TeamMember[]; loading: boolean }) {
+    const scroller = useRef<HTMLDivElement>(null);
+    const [paused, setPaused] = useState(false);
+    const movable = members.length > MIN_TO_MOVE;
+
+    useEffect(() => {
+        if (!movable || paused) return;
+        const id = setInterval(() => {
+            const el = scroller.current;
+            if (!el) return;
+            const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 8;
+            el.scrollTo({ left: atEnd ? 0 : el.scrollLeft + STEP, behavior: 'smooth' });
+        }, 3000);
+        return () => clearInterval(id);
+    }, [movable, paused, members.length]);
+
     if (loading) {
         return (
-            <div className="flex gap-8 w-max">
-                {Array.from({ length: 5 }).map((_, i) => <SkeletonCard key={i} />)}
+            <div className="flex gap-8 justify-center px-4">
+                {Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)}
             </div>
         );
     }
-    if (members.length === 0) return null;
+
+    if (members.length === 0) {
+        return <p className="text-center text-gray-400 py-8">No members to show yet.</p>;
+    }
+
+    // Few members → static, centered, no movement.
+    if (!movable) {
+        return (
+            <div className="flex flex-wrap gap-8 justify-center">
+                {members.map((m, i) => <MemberCard key={i} member={m} />)}
+            </div>
+        );
+    }
+
+    const nudge = (dir: number) => scroller.current?.scrollBy({ left: dir * STEP, behavior: 'smooth' });
+
     return (
-        <motion.div
-            className="flex gap-8 w-max"
-            animate={{ x: animateX }}
-            transition={{ repeat: Infinity, ease: 'linear', duration: 30 }}
+        <div
+            className="relative"
+            onMouseEnter={() => setPaused(true)}
+            onMouseLeave={() => setPaused(false)}
+            onTouchStart={() => setPaused(true)}
         >
-            {[...members, ...members].map((member, idx) => (
-                <MemberCard key={idx} member={member} hidden={idx >= members.length} />
-            ))}
-        </motion.div>
+            <button
+                type="button"
+                onClick={() => nudge(-1)}
+                aria-label="Previous"
+                className="absolute left-1 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white shadow-lg border border-gray-100 flex items-center justify-center text-bcp-dark hover:bg-bcp-red hover:text-white transition-colors"
+            >
+                <ChevronLeft className="w-5 h-5" />
+            </button>
+
+            <div className="absolute left-0 top-0 bottom-0 w-16 z-10 bg-gradient-to-r from-white to-transparent pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-16 z-10 bg-gradient-to-l from-white to-transparent pointer-events-none" />
+
+            <div
+                ref={scroller}
+                className="flex gap-8 overflow-x-auto scroll-smooth snap-x snap-mandatory px-14 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            >
+                {members.map((m, i) => (
+                    <div key={i} className="snap-center shrink-0">
+                        <MemberCard member={m} />
+                    </div>
+                ))}
+            </div>
+
+            <button
+                type="button"
+                onClick={() => nudge(1)}
+                aria-label="Next"
+                className="absolute right-1 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white shadow-lg border border-gray-100 flex items-center justify-center text-bcp-dark hover:bg-bcp-red hover:text-white transition-colors"
+            >
+                <ChevronRight className="w-5 h-5" />
+            </button>
+        </div>
     );
 }
 
@@ -63,20 +134,14 @@ export default function Leadership() {
                     </p>
                 </div>
 
-                {/* BOG Row — scrolls left */}
                 <p className="text-center text-sm font-bold tracking-widest uppercase text-gray-400 mb-6">Board of Governance</p>
-                <div className="relative w-full overflow-hidden mb-4">
-                    <div className="absolute left-0 top-0 bottom-0 w-24 z-10 bg-gradient-to-r from-white to-transparent pointer-events-none" />
-                    <div className="absolute right-0 top-0 bottom-0 w-24 z-10 bg-gradient-to-l from-white to-transparent pointer-events-none" />
-                    <MarqueeRow members={bog ?? []} loading={loading} animateX={[0, -2000]} />
+                <div className="mb-12">
+                    <TeamSlider members={bog ?? []} loading={loading} />
                 </div>
 
-                {/* Core Cabinet Row — scrolls right */}
                 <p className="text-center text-sm font-bold tracking-widest uppercase text-gray-400 mb-6 mt-12">Core Cabinet</p>
-                <div className="relative w-full overflow-hidden mb-16">
-                    <div className="absolute left-0 top-0 bottom-0 w-24 z-10 bg-gradient-to-r from-white to-transparent pointer-events-none" />
-                    <div className="absolute right-0 top-0 bottom-0 w-24 z-10 bg-gradient-to-l from-white to-transparent pointer-events-none" />
-                    <MarqueeRow members={core ?? []} loading={loading} animateX={[-2000, 0]} />
+                <div className="mb-4">
+                    <TeamSlider members={core ?? []} loading={loading} />
                 </div>
             </div>
         </section>

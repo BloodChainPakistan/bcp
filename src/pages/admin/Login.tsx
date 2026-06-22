@@ -12,16 +12,21 @@ export default function AdminLogin() {
   const [busy, setBusy] = useState(false);
   const [attempted, setAttempted] = useState(false);
 
-  // Redirect once we know the role. Waiting for roleLoading avoids the race
-  // where the gate bounced a genuine admin before their role had loaded.
+  // Redirect once we know the role IS admin. Waiting for roleLoading avoids the
+  // race where the gate bounced a genuine admin before their role had loaded.
   useEffect(() => {
-    if (!session || roleLoading) return;
-    if (role === 'admin') {
+    if (session && !roleLoading && role === 'admin') {
       navigate('/admin', { replace: true });
-    } else if (attempted) {
-      setError('Signed in, but this account does not have admin access. Ask an administrator to grant the admin role.');
     }
-  }, [session, role, roleLoading, attempted, navigate]);
+  }, [session, role, roleLoading, navigate]);
+
+  // Derived (not stored in state): signed in, role resolved, but not an admin.
+  const accessDenied = attempted && !!session && !roleLoading && role !== 'admin';
+  const message =
+    error ??
+    (accessDenied
+      ? 'Signed in, but this account does not have admin access. Ask an administrator to grant the admin role.'
+      : null);
 
   async function handle(e: React.FormEvent) {
     e.preventDefault();
@@ -45,7 +50,7 @@ export default function AdminLogin() {
           <p className="text-gray-500 text-sm mt-1">Blood Chain Pakistan — Command Center</p>
         </div>
 
-        {error && <div className="p-3 bg-red-50 text-red-700 rounded-xl text-sm text-center">{error}</div>}
+        {message && <div className="p-3 bg-red-50 text-red-700 rounded-xl text-sm text-center">{message}</div>}
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
