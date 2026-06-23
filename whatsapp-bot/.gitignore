@@ -1,6 +1,0 @@
-node_modules
-.env
-# whatsapp-web.js session (a logged-in WhatsApp auth — NEVER commit this)
-.wwebjs_auth
-.wwebjs_cache
-*.log
